@@ -6,9 +6,9 @@ const features = [
   {
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
-        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-        <path d="M2 17l10 5 10-5"/>
-        <path d="M2 12l10 5 10-5"/>
+        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5" />
+        <path d="M2 12l10 5 10-5" />
       </svg>
     ),
     title: 'Organic Fibers',
@@ -17,8 +17,8 @@ const features = [
   {
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
-        <path d="M12 20h9"/>
-        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
       </svg>
     ),
     title: 'Heritage Stitches',
@@ -87,53 +87,67 @@ export default function StorySection() {
           </div>
 
           {/* Right image composition */}
-          <div className="reveal reveal-delay-1 relative">
-            <div className="grid grid-cols-2 gap-4">
-              {/* Large image */}
-              <div className="col-span-1 row-span-2 bg-frosty-blue/30 dark:bg-dark-card rounded-3xl overflow-hidden aspect-[3/4] flex items-center justify-center">
-                <div className="text-frosty-blue dark:text-[#4A7A8A] opacity-60">
-                  <svg viewBox="0 0 120 160" fill="none" className="w-24 h-32">
-                    {/* Crochet stitch pattern */}
-                    {[0,1,2,3,4].map(row =>
-                      [0,1,2].map(col => (
-                        <ellipse
-                          key={`${row}-${col}`}
-                          cx={20 + col * 40}
-                          cy={20 + row * 28}
-                          rx="15"
-                          ry="10"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          fill="none"
-                        />
-                      ))
-                    )}
-                  </svg>
+          <div className="reveal reveal-delay-1 relative flex justify-center items-center">
+
+            {/* Orbit area */}
+            <div className="relative w-[500px] h-[500px]">
+
+              {/* Orbit path */}
+              <div className="absolute inset-0 orbit">
+
+
+                {/* Image 1 */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2">
+
+                  <div className="counter-orbit w-60 h-72 rounded-3xl overflow-hidden shadow-xl">
+
+                    <img
+                      src="/assets/1.jpeg"
+                      alt="Product 1"
+                      className="w-full h-full object-cover"
+                    />
+
+                  </div>
+
                 </div>
+
+
+                {/* Image 2 */}
+                <div className="absolute bottom-4 left-4">
+
+                  <div className="counter-orbit w-50 h-60 rounded-3xl overflow-hidden shadow-xl">
+
+                    <img
+                      src="/assets/2.jpeg"
+                      alt="Product 2"
+                      className="w-full h-full object-cover"
+                    />
+
+                  </div>
+
+                </div>
+
+
+                {/* Image 3 */}
+                <div className="absolute bottom-4 right-4">
+
+                  <div className="counter-orbit w-40 h-50 rounded-3xl overflow-hidden shadow-xl">
+
+                    <img
+                      src="/assets/3.jpeg"
+                      alt="Product 3"
+                      className="w-full h-full object-cover"
+                    />
+
+                  </div>
+
+                </div>
+
+
               </div>
 
-              {/* Stacked small images */}
-              <div className="bg-soft-lavender/30 dark:bg-dark-card rounded-3xl overflow-hidden aspect-square flex items-center justify-center">
-                <svg viewBox="0 0 80 80" fill="none" className="w-16 h-16 text-lavender dark:text-[#6B5F7A] opacity-60">
-                  <circle cx="40" cy="40" r="30" stroke="currentColor" strokeWidth="2"/>
-                  <path d="M25 40 Q40 20 55 40 Q40 60 25 40Z" stroke="currentColor" strokeWidth="2"/>
-                </svg>
-              </div>
-              <div className="bg-pastel-pink/30 dark:bg-dark-card rounded-3xl overflow-hidden aspect-square flex items-center justify-center">
-                <svg viewBox="0 0 80 80" fill="none" className="w-16 h-16 text-dusty-rose opacity-50">
-                  {[0,1,2,3].map(i => (
-                    <path key={i} d={`M${10 + i*5} 15 Q40 ${60 - i*8} ${70 - i*5} 15`} stroke="currentColor" strokeWidth="1.5"/>
-                  ))}
-                </svg>
-              </div>
             </div>
 
-            {/* Floating quote */}
-            <div className="absolute -bottom-6 -left-6 bg-white dark:bg-dark-card rounded-2xl p-5 shadow-xl shadow-warm-taupe/10 max-w-xs">
-              <p className="font-display text-sm italic text-warm-taupe dark:text-[#A89990] leading-relaxed">
-                "Our journey is one of patience, precision, and passion."
-              </p>
-            </div>
           </div>
         </div>
       </div>

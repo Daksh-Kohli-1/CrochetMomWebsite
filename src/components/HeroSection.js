@@ -33,9 +33,9 @@ export default function HeroSection() {
           {/* Left content */}
           <div className="space-y-8">
             <div className="reveal hero-reveal">
-              <p className="font-body text-xs tracking-[0.3em] uppercase text-dusty-rose mb-6">
+              {/* <p className="font-body text-xs tracking-[0.3em] uppercase text-dusty-rose mb-6">
                 Est. 1994 Artisan Atelier
-              </p>
+              </p> */}
               <h1 className="font-display text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-[#2C2420] dark:text-[#E8DDD8]">
                 Handmade Is The
                 <br />
@@ -63,7 +63,7 @@ export default function HeroSection() {
             </div>
 
             {/* Stats */}
-            <div className="reveal hero-reveal flex gap-10 pt-4 reveal-delay-3">
+            {/* <div className="reveal hero-reveal flex gap-10 pt-4 reveal-delay-3">
               {[
                 { num: '2,400+', label: 'Pieces Crafted' },
                 { num: '30 yrs', label: 'of Artistry' },
@@ -74,7 +74,7 @@ export default function HeroSection() {
                   <p className="font-body text-xs tracking-wider text-warm-taupe dark:text-[#A89990] mt-0.5">{label}</p>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* Right image composition */}
@@ -83,15 +83,11 @@ export default function HeroSection() {
             <div className="relative ml-auto w-full max-w-sm lg:max-w-none">
               <div className="relative bg-pastel-pink/20 dark:bg-dark-card rounded-3xl overflow-hidden aspect-[4/5] flex items-center justify-center shadow-2xl shadow-dusty-rose/10">
                 {/* Decorative placeholder for product image */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-48 h-56 md:w-64 md:h-72 relative">
-                    {/* Sweater illustration placeholder */}
-                    <svg viewBox="0 0 200 240" fill="none" className="w-full h-full opacity-60 dark:opacity-40">
-                      <path d="M60 40 C60 40 30 50 20 80 L10 140 L50 145 L55 100 L55 240 L145 240 L145 100 L150 145 L190 140 L180 80 C170 50 140 40 140 40 C130 55 120 65 100 65 C80 65 70 55 60 40Z" fill="#E8B4B0" stroke="#C9837A" strokeWidth="1"/>
-                      <path d="M55 100 L55 130 M145 100 L145 130" stroke="#C9837A" strokeWidth="0.5" strokeDasharray="3 3"/>
-                    </svg>
-                  </div>
-                </div>
+                <img
+                  src="/assets/hero.jpeg"
+                  alt="Hero product"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
                 {/* Gradient overlay */}
                 <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-pastel-pink/30 dark:from-dark-card/60 to-transparent" />
               </div>

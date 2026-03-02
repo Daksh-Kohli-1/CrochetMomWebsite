@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import ThemeToggle from './ThemeToggle';
 import NavStitch from './NavStitch';
 
-const navLinks = ['Collections', 'The Art', 'Custom', 'Our Story'];
+const navLinks = ['Collections', 'The Art',];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -72,7 +72,8 @@ export default function Navbar() {
         </div>
 
         {/* ── Stitch animation along the navbar bottom edge ── */}
-        <NavStitch />
+        {/* <NavStitch /> */}
+        {/* <YarnThread/> */}
       </nav>
 
       {/* Mobile menu */}

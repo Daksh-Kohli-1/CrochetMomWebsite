@@ -10,8 +10,8 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <StorySection />
-      <ProductGrid />
-      <Footer />
+      {/* <ProductGrid /> */}
+      {/* <Footer /> */}
     </main>
   );
 }
