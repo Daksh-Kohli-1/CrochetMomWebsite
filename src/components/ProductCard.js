@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, Loader2 } from 'lucide-react';
 import { generateWhatsAppLink } from '../lib/whatsapp';
-
+ 
 const colorMap = {
   'frosty-blue': 'bg-frosty-blue/20 dark:bg-[#1A3040]',
   'pastel-pink': 'bg-pastel-pink/20 dark:bg-[#3A1E1C]',
@@ -28,7 +28,6 @@ function ButtonKnitCanvas({ running }) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    // Match canvas resolution to its CSS size
     const W = canvas.offsetWidth;
     const H = canvas.offsetHeight;
     canvas.width = W * window.devicePixelRatio;
@@ -41,11 +40,10 @@ function ButtonKnitCanvas({ running }) {
 
     const draw = (ts) => {
       if (!startRef.current) startRef.current = ts;
-      const t = ((ts - startRef.current) % 2000) / 2000; // loop every 2 s
+      const t = ((ts - startRef.current) % 2000) / 2000;
 
       ctx.clearRect(0, 0, W, H);
 
-      // 4 threads spiral in from left/right, weave over-under at centre
       for (let i = 0; i < 4; i++) {
         const phase = (i / 4) * Math.PI * 2;
         const color = COLORS[i];
@@ -60,10 +58,8 @@ function ButtonKnitCanvas({ running }) {
         const STEPS = 60;
         for (let s = 0; s <= STEPS; s++) {
           const pct = s / STEPS;
-          // Radius shrinks to 0 then expands: thread stabs inward and out
           const r = Math.abs(Math.sin((pct + prog) * Math.PI)) * (W * 0.46);
           const angle = phase + pct * Math.PI * 5 + prog * Math.PI * 2;
-          // Weave amplitude — alternating over/under
           const weave = 4 * Math.sin(pct * Math.PI * 10 + phase + prog * Math.PI * 4);
           const x = cx + r * Math.cos(angle) + weave * Math.cos(angle + Math.PI / 2);
           const y = cy + r * Math.sin(angle) + weave * Math.sin(angle + Math.PI / 2);
@@ -73,7 +69,6 @@ function ButtonKnitCanvas({ running }) {
         ctx.globalAlpha = 1;
       }
 
-      // Central knot glow
       const knotR = 5 + 2 * Math.sin(t * Math.PI * 4);
       const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, knotR * 2.5);
       grd.addColorStop(0, 'rgba(201,131,122,0.55)');
@@ -106,10 +101,22 @@ export default function ProductCard({
   material,
   tagLabel,
   colorScheme = 'pastel-pink',
+  imageUrl,
   delay = 0,
 }) {
   const [phase, setPhase] = useState('idle'); // idle | stitching | done
   const timerRef = useRef(null);
+
+  // Fix: Reset phase when user returns to the tab
+  useEffect(() => {
+    const reset = () => {
+      if (document.visibilityState === 'visible') setPhase('idle');
+    };
+    document.addEventListener('visibilitychange', reset);
+    return () => document.removeEventListener('visibilitychange', reset);
+  }, []);
+
+  useEffect(() => () => clearTimeout(timerRef.current), []);
 
   const handleStitch = () => {
     if (phase !== 'idle') return;
@@ -118,12 +125,10 @@ export default function ProductCard({
       setPhase('done');
       const link = generateWhatsAppLink(name);
       window.open(link, '_blank', 'noopener,noreferrer');
-      // Reset after redirect
-      setTimeout(() => setPhase('idle'), 400);
+      // Fix: Reset immediately instead of with a delay
+      setPhase('idle');
     }, 2000);
   };
-
-  useEffect(() => () => clearTimeout(timerRef.current), []);
 
   const isStitching = phase === 'stitching';
 
@@ -132,7 +137,7 @@ export default function ProductCard({
       className="product-card reveal group rounded-3xl overflow-hidden flex flex-col"
       style={{ transitionDelay: `${delay}ms` }}
     >
-      {/* ── Image area — clean, no animation ── */}
+      {/* ── Image area ── */}
       <div
         className={`relative ${colorMap[colorScheme] || colorMap['pastel-pink']} aspect-[3/4] flex items-center justify-center overflow-hidden rounded-3xl`}
       >
@@ -142,26 +147,34 @@ export default function ProductCard({
           </span>
         )}
 
-        {/* Static decorative yarn pattern */}
-        <svg
-          viewBox="0 0 120 160"
-          fill="none"
-          className="w-28 h-36 text-dusty-rose opacity-20 dark:opacity-15 group-hover:scale-105 transition-transform duration-500"
-        >
-          <path
-            d="M60 20 C30 40 20 80 30 120 C40 150 60 160 60 160 C60 160 80 150 90 120 C100 80 90 40 60 20Z"
-            stroke="currentColor"
-            strokeWidth="2"
+        {/* Image or fallback SVG */}
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={name}
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          {[0, 1, 2, 3].map((i) => (
+        ) : (
+          <svg
+            viewBox="0 0 120 160"
+            fill="none"
+            className="w-28 h-36 text-dusty-rose opacity-20 dark:opacity-15 group-hover:scale-105 transition-transform duration-500"
+          >
             <path
-              key={i}
-              d={`M40 ${50 + i * 20} Q60 ${40 + i * 20} 80 ${50 + i * 20}`}
+              d="M60 20 C30 40 20 80 30 120 C40 150 60 160 60 160 C60 160 80 150 90 120 C100 80 90 40 60 20Z"
               stroke="currentColor"
-              strokeWidth="1.5"
+              strokeWidth="2"
             />
-          ))}
-        </svg>
+            {[0, 1, 2, 3].map((i) => (
+              <path
+                key={i}
+                d={`M40 ${50 + i * 20} Q60 ${40 + i * 20} 80 ${50 + i * 20}`}
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+            ))}
+          </svg>
+        )}
 
         <div className="absolute inset-0 bg-dusty-rose/0 group-hover:bg-dusty-rose/5 transition-colors duration-500" />
       </div>
@@ -179,12 +192,13 @@ export default function ProductCard({
               </p>
             )}
           </div>
+          {/* Fix: Rupees symbol instead of $ */}
           {price && (
-            <span className="font-display text-base text-dusty-rose shrink-0">${price}</span>
+            <span className="font-display text-base text-dusty-rose shrink-0">₹{price}</span>
           )}
         </div>
 
-        {/* ── Stitch button — animation lives HERE ── */}
+        {/* ── Stitch button ── */}
         <button
           onClick={handleStitch}
           disabled={isStitching}
@@ -198,24 +212,23 @@ export default function ProductCard({
             }
           `}
         >
-          {/* Canvas knitting animation — only active while stitching */}
           <ButtonKnitCanvas running={isStitching} />
 
-          {/* Idle label */}
+          {/* Idle label — Fix: changed hover text to dark brown for contrast */}
           <span
             className={`
               absolute inset-0 flex items-center justify-center gap-2
               transition-all duration-300
               ${isStitching ? 'opacity-0 scale-90' : 'opacity-100 scale-100'}
               text-warm-taupe dark:text-[#A89990]
-              group-hover:text-white
+              group-hover:text-[#2C2420]
             `}
           >
             <MessageCircle size={13} strokeWidth={1.5} />
             Stitch One For Me
           </span>
 
-          {/* Stitching label — sits above canvas */}
+          {/* Stitching label */}
           <span
             className={`
               relative z-10 flex items-center justify-center gap-2

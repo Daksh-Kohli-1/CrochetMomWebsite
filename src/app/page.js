@@ -3,6 +3,7 @@ import HeroSection from '../components/HeroSection';
 import StorySection from '../components/StorySection';
 import ProductGrid from '../components/ProductGrid';
 import Footer from '../components/Footer';
+import BouquetBuilder from '../components/BouquetBuilder';
 
 export default function Home() {
   return (
@@ -10,8 +11,9 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <StorySection />
-      {/* <ProductGrid /> */}
-      {/* <Footer /> */}
+      <ProductGrid />
+      <BouquetBuilder/>
+      <Footer />
     </main>
   );
 }

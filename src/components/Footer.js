@@ -1,16 +1,16 @@
 export default function Footer() {
   const columns = [
-    {
-      title: 'Collections',
-      links: ['Autumn Winter', 'Home Essentials', 'Artisanal Wraps', 'Gift Cards'],
-    },
-    {
-      title: 'Company',
-      links: ['Our Story', 'Sustainability', 'Careers', 'Press'],
-    },
+    // {
+    //   title: 'Collections',
+    //   links: ['Autumn Winter', 'Home Essentials', 'Artisanal Wraps', 'Gift Cards'],
+    // },
+    // {
+    //   title: 'Company',
+    //   links: ['Our Story', 'Sustainability', 'Careers', 'Press'],
+    // },
     {
       title: 'Connect',
-      links: ['Instagram', 'Pinterest'],
+      links: ['Instagram', ],
     },
   ];
 
@@ -61,13 +61,13 @@ export default function Footer() {
           <p className="font-body text-xs text-[#4A3C36]">
             © 2024 Luxury Crochet. All rights reserved.
           </p>
-          <div className="flex gap-6">
+          {/* <div className="flex gap-6">
             {['Privacy Policy', 'Terms'].map((item) => (
               <a key={item} href="#" className="font-body text-xs text-[#4A3C36] hover:text-dusty-rose transition-colors duration-300">
                 {item}
               </a>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>

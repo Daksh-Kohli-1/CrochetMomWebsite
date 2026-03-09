@@ -2,17 +2,18 @@
 
 import { useEffect, useRef } from 'react';
 import ProductCard from './ProductCard';
+import { PRODUCTS } from '../lib/catalog';
 
 const signatureSeries = [
-  { name: 'The Azure Drift Wrap', price: 240, material: 'Fine merino wool blend', tagLabel: 'Frosty Blue', colorScheme: 'frosty-blue' },
-  { name: 'Petal Cardigan', price: 380, material: 'Hand-dyed organic cotton', tagLabel: 'Blush Rose', colorScheme: 'pastel-pink' },
-  { name: 'Eclipse Throw', price: 520, material: 'Weighted luxury alpaca yarn', tagLabel: 'Slate Charcoal', colorScheme: 'soft-lavender' },
+  { name: 'The Azure Drift Wrap', price: 240, material: 'Fine merino wool blend', tagLabel: 'Frosty Blue', colorScheme: 'frosty-blue', imageUrl: '/assets/4.jpeg' },
+  { name: 'Petal Cardigan', price: 380, material: 'Hand-dyed organic cotton', tagLabel: 'Blush Rose', colorScheme: 'pastel-pink', imageUrl: '/assets/5.jpeg' },
+  { name: 'Eclipse Throw', price: 520, material: 'Weighted luxury alpaca yarn', tagLabel: 'Slate Charcoal', colorScheme: 'soft-lavender', imageUrl: '/assets/6.jpeg' },
 ];
 
 const seasonalCurations = [
-  { name: 'The Ethereal Wrap', price: 420, material: 'Pure merino wool', tagLabel: 'Heritage', colorScheme: 'warm-cream' },
-  { name: 'Lavender Morning Coat', price: 580, material: 'Silk & mohair blend', tagLabel: 'New Season', colorScheme: 'soft-lavender' },
-  { name: 'Artisan Bloom Clutch', price: 295, material: 'Organic pima cotton', tagLabel: 'Limited', colorScheme: 'pastel-pink' },
+  { name: 'The Ethereal Wrap', price: 420, material: 'Pure merino wool', tagLabel: 'Heritage', colorScheme: 'warm-cream', imageUrl: '/assets/ethereal-wrap.jpg' },
+  { name: 'Lavender Morning Coat', price: 580, material: 'Silk & mohair blend', tagLabel: 'New Season', colorScheme: 'soft-lavender', imageUrl: '/assets/lavender-morning-coat.jpg' },
+  { name: 'Artisan Bloom Clutch', price: 295, material: 'Organic pima cotton', tagLabel: 'Limited', colorScheme: 'pastel-pink', imageUrl: '/assets/artisan-bloom-clutch.jpg' },
 ];
 
 export default function ProductGrid() {
@@ -41,11 +42,11 @@ export default function ProductGrid() {
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex items-end justify-between mb-12 reveal">
             <div>
-              <p className="font-body text-xs tracking-[0.3em] uppercase text-dusty-rose mb-3">Curated Selection</p>
+              {/* <p className="font-body text-xs tracking-[0.3em] uppercase text-dusty-rose mb-3">Curated Selection</p> */}
               <h2 className="font-display text-4xl md:text-5xl text-[#2C2420] dark:text-[#E8DDD8]">The Signature Series</h2>
-              <p className="font-body text-sm text-warm-taupe dark:text-[#A89990] mt-2">Limited edition hand-stitched essentials.</p>
+              {/* <p className="font-body text-sm text-warm-taupe dark:text-[#A89990] mt-2">Limited edition hand-stitched essentials.</p> */}
             </div>
-            <a href="#" className="hidden md:flex items-center gap-2 font-body text-xs tracking-widest uppercase text-dusty-rose hover:gap-3 transition-all duration-300">
+            <a href="/showroom" className="hidden md:flex items-center gap-2 font-body text-xs tracking-widest uppercase text-dusty-rose hover:gap-3 transition-all duration-300">
               View All
               <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4" stroke="currentColor" strokeWidth="1.5">
                 <path d="M3 8h10M9 4l4 4-4 4"/>
@@ -77,7 +78,7 @@ export default function ProductGrid() {
       </div>
 
       {/* Seasonal Curations */}
-      <section className="py-24 lg:py-32 bg-warm-white dark:bg-dark-surface">
+      {/* <section className="py-24 lg:py-32 bg-warm-white dark:bg-dark-surface">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex items-end justify-between mb-12 reveal">
             <div>
@@ -99,10 +100,10 @@ export default function ProductGrid() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Custom CTA */}
-      <section className="py-20 bg-cream dark:bg-dark-warm">
+      {/* <section className="py-20 bg-cream dark:bg-dark-warm">
         <div className="max-w-2xl mx-auto px-6 text-center reveal">
           <h2 className="font-display text-3xl md:text-4xl text-[#2C2420] dark:text-[#E8DDD8] mb-4">Create Your Masterpiece</h2>
           <p className="font-body text-sm leading-relaxed text-warm-taupe dark:text-[#A89990] mb-8">
@@ -119,7 +120,7 @@ export default function ProductGrid() {
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

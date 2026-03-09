@@ -11,8 +11,8 @@ const features = [
         <path d="M2 12l10 5 10-5" />
       </svg>
     ),
-    title: 'Organic Fibers',
-    desc: 'Sourced from ethical premium suppliers across the Mediterranean.',
+    title: 'Quality Fibers',
+    desc: 'Sourced from ethical and premium suppliers.',
   },
   {
     icon: (
