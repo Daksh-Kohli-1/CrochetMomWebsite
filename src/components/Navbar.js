@@ -53,7 +53,7 @@ export default function Navbar() {
 
         {/* Right side */}
         <div className="flex items-center gap-2">
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
           <a
             href="#collections"
             className="hidden md:inline-flex items-center px-5 py-2 rounded-full bg-dusty-rose text-white text-xs tracking-widest uppercase font-body hover:bg-muted-rose transition-colors duration-300"

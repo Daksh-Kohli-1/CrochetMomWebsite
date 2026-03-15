@@ -1,23 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { MessageCircle, Loader2, SlidersHorizontal, X, ChevronDown } from 'lucide-react';
+import { MessageCircle, Loader2, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { generateWhatsAppLink } from '../../lib/whatsapp';
+import { PRODUCTS } from '../../lib/catalog';
 
-// ─── All products ────────────────────────────────────────────────────────────
-const ALL_PRODUCTS = [
-  // Signature Series
-  { id: 1, name: 'The Azure Drift Wrap', price: 240, material: 'Fine merino wool blend', tagLabel: 'Frosty Blue', colorScheme: 'frosty-blue', imageUrl: '/assets/4.jpeg', category: 'Wraps', series: 'Signature' },
-  { id: 2, name: 'Petal Cardigan', price: 380, material: 'Hand-dyed organic cotton', tagLabel: 'Blush Rose', colorScheme: 'pastel-pink', imageUrl: '/assets/5.jpeg', category: 'Cardigans', series: 'Signature' },
-  { id: 3, name: 'Eclipse Throw', price: 520, material: 'Weighted luxury alpaca yarn', tagLabel: 'Slate Charcoal', colorScheme: 'soft-lavender', imageUrl: '/assets/6.jpeg', category: 'Throws', series: 'Signature' },
-  // Additional products — add your own imageUrls
-  { id: 4, name: 'Rose Garden Shawl', price: 310, material: 'Organic pima cotton', tagLabel: 'Heritage', colorScheme: 'warm-cream', imageUrl: '/assets/1.jpeg', category: 'Shawls', series: 'Seasonal' },
-  { id: 5, name: 'Morning Mist Poncho', price: 450, material: 'Silk & mohair blend', tagLabel: 'New Season', colorScheme: 'soft-lavender', imageUrl: '/assets/2.jpeg', category: 'Wraps', series: 'Seasonal' },
-  { id: 6, name: 'Bloom Clutch', price: 195, material: 'Hand-spun wool', tagLabel: 'Limited', colorScheme: 'pastel-pink', imageUrl: '/assets/3.jpeg', category: 'Accessories', series: 'Seasonal' },
-];
-
-const CATEGORIES = [];
-const SORT_OPTIONS = ['Featured', 'Price: Low to High', 'Price: High to Low', 'Newest'];
+const SORT_OPTIONS = ['Featured', 'Price: Low to High', 'Price: High to Low'];
 
 const colorMap = {
   'frosty-blue':   'bg-[#D6EAF4]',
@@ -26,7 +14,7 @@ const colorMap = {
   'warm-cream':    'bg-[#F5EFE6]',
 };
 
-// ─── Knit canvas animation (reused from ProductCard) ─────────────────────────
+// ─── Knit canvas animation ────────────────────────────────────────────────────
 function ButtonKnitCanvas({ running }) {
   const canvasRef = useRef(null);
   const rafRef    = useRef(null);
@@ -87,7 +75,6 @@ function ProductCard({ name, price, material, tagLabel, colorScheme = 'pastel-pi
     if (phase !== 'idle') return;
     setPhase('stitching');
     timerRef.current = setTimeout(() => {
-      setPhase('done');
       const link = generateWhatsAppLink(name);
       window.open(link, '_blank', 'noopener,noreferrer');
       setPhase('idle');
@@ -98,10 +85,9 @@ function ProductCard({ name, price, material, tagLabel, colorScheme = 'pastel-pi
 
   return (
     <div
-      className="group rounded-3xl overflow-hidden flex flex-col animate-fadeUp"
-      style={{ animationDelay: `${delay}ms`, animationFillMode: 'both' }}
+      className="group rounded-3xl overflow-hidden flex flex-col"
+      style={{ animation: `fadeUp 0.6s ease-out ${delay}ms both` }}
     >
-      {/* Image */}
       <div className={`relative ${colorMap[colorScheme] || colorMap['pastel-pink']} aspect-[3/4] flex items-center justify-center overflow-hidden rounded-3xl`}>
         {tagLabel && (
           <span className="absolute top-4 left-4 font-body text-[10px] tracking-widest uppercase bg-white/70 backdrop-blur-sm px-3 py-1 rounded-full text-[#8A7060] z-10">
@@ -119,7 +105,6 @@ function ProductCard({ name, price, material, tagLabel, colorScheme = 'pastel-pi
         <div className="absolute inset-0 bg-[#C9837A]/0 group-hover:bg-[#C9837A]/5 transition-colors duration-500" />
       </div>
 
-      {/* Info */}
       <div className="pt-4 pb-2 px-1 flex flex-col gap-2 flex-1">
         <div className="flex items-start justify-between gap-2">
           <div>
@@ -155,38 +140,17 @@ function ProductCard({ name, price, material, tagLabel, colorScheme = 'pastel-pi
 
 // ─── Main Collections Page ────────────────────────────────────────────────────
 export default function CollectionsPage() {
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [sortBy, setSortBy]                 = useState('Featured');
-  const [showSort, setShowSort]             = useState(false);
-  const [showFilter, setShowFilter]         = useState(false);
+  const [sortBy, setSortBy]   = useState('Featured');
+  const [showSort, setShowSort] = useState(false);
 
-  const filtered = ALL_PRODUCTS
-    .filter(p => activeCategory === 'All' || p.category === activeCategory)
-    .sort((a, b) => {
-      if (sortBy === 'Price: Low to High')  return a.price - b.price;
-      if (sortBy === 'Price: High to Low')  return b.price - a.price;
-      return 0;
-    });
+  const sorted = [...PRODUCTS].sort((a, b) => {
+    if (sortBy === 'Price: Low to High') return a.price - b.price;
+    if (sortBy === 'Price: High to Low') return b.price - a.price;
+    return 0; // Featured — preserve catalog order
+  });
 
   return (
-    <div className="min-h-screen bg-[#FAF7F4]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-
-      {/* Google Fonts */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
-        .font-display { font-family: 'Cormorant Garamond', serif; }
-        .font-body    { font-family: 'Jost', sans-serif; }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(22px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeUp { animation: fadeUp 0.6s ease-out; }
-        .animate-spin   { animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .filter-pill {
-          transition: background 0.2s, color 0.2s, border-color 0.2s;
-        }
-      `}</style>
+    <div className="min-h-screen bg-[#FAF7F4]">
 
       {/* ── Header ── */}
       <header className="sticky top-0 z-40 bg-[#FAF7F4]/90 backdrop-blur-md border-b border-[#E8DDD8]/60">
@@ -201,40 +165,24 @@ export default function CollectionsPage() {
 
       {/* ── Hero Banner ── */}
       <section className="py-16 lg:py-24 max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="animate-fadeUp">
+        <div style={{ animation: 'fadeUp 0.6s ease-out both' }}>
           <p className="font-body text-[10px] tracking-[0.35em] uppercase text-[#C9837A] mb-3">Every Stitch, a Story</p>
-          <h1 className="font-display text-5xl md:text-7xl text-[#2C2420] leading-none mb-4">
-            The Collection
-          </h1>
+          <h1 className="font-display text-5xl md:text-7xl text-[#2C2420] leading-none mb-4">The Collection</h1>
           <p className="font-body text-sm text-[#8A7060] max-w-md leading-relaxed">
             Handcrafted with intention. Each piece is made to order, carrying the warmth of the hands that made it.
           </p>
         </div>
       </section>
 
-      {/* ── Filter / Sort Bar ── */}
+      {/* ── Sort Bar ── */}
       <div className="sticky top-16 z-30 bg-[#FAF7F4]/90 backdrop-blur-md border-b border-[#E8DDD8]/40 py-4">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between">
 
-          {/* Category pills — scrollable on mobile */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar flex-1">
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`filter-pill shrink-0 px-4 py-1.5 rounded-full font-body text-[11px] tracking-widest uppercase border
-                  ${activeCategory === cat
-                    ? 'bg-[#2C2420] text-[#FAF7F4] border-[#2C2420]'
-                    : 'bg-transparent text-[#8A7060] border-[#E8C4BF]/60 hover:border-[#C9837A] hover:text-[#2C2420]'
-                  }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+          <p className="font-body text-xs text-[#8A7060] tracking-wide">
+            {sorted.length} piece{sorted.length !== 1 ? 's' : ''}
+          </p>
 
-          {/* Sort */}
-          <div className="relative shrink-0">
+          <div className="relative">
             <button
               onClick={() => setShowSort(v => !v)}
               className="flex items-center gap-2 font-body text-[11px] tracking-widest uppercase text-[#8A7060] hover:text-[#2C2420] transition-colors border border-[#E8C4BF]/60 hover:border-[#C9837A] rounded-full px-4 py-1.5"
@@ -261,30 +209,16 @@ export default function CollectionsPage() {
         </div>
       </div>
 
-      {/* ── Product Count ── */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-8 pb-2">
-        <p className="font-body text-xs text-[#8A7060] tracking-wide">
-          {filtered.length} piece{filtered.length !== 1 ? 's' : ''} {activeCategory !== 'All' ? `in ${activeCategory}` : ''}
-        </p>
-      </div>
-
       {/* ── Product Grid ── */}
-      <main className="max-w-7xl mx-auto px-6 lg:px-12 py-8 pb-24">
-        {filtered.length === 0 ? (
-          <div className="text-center py-24">
-            <p className="font-display text-3xl text-[#2C2420] mb-3">Nothing here yet</p>
-            <p className="font-body text-sm text-[#8A7060]">Try a different category.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {filtered.map((product, i) => (
-              <ProductCard key={product.id} {...product} delay={i * 80} />
-            ))}
-          </div>
-        )}
+      <main className="max-w-7xl mx-auto px-6 lg:px-12 py-12 pb-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {sorted.map((product, i) => (
+            <ProductCard key={product.id} {...product} delay={i * 80} />
+          ))}
+        </div>
       </main>
 
-      {/* ── Footer strip ── */}
+      {/* ── Footer ── */}
       <footer className="border-t border-[#E8DDD8]/60 py-10 bg-[#F5EFE6]">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="font-display text-lg text-[#2C2420]">Luxury Crochet</p>

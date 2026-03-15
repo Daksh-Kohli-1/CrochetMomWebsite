@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Plus, Minus, Trash2, MessageCircle, Sparkles } from 'lucide-react';
 import { BOUQUET_FLOWERS } from '../lib/catalog';
-import { generateWhatsAppLink } from '../lib/whatsapp';
+import { generateBouquetWhatsAppLink } from '../lib/whatsapp';
 
 // ─── Tiny animated stem/petal SVG for empty state ────────────────────────────
 function EmptyVase() {
@@ -41,6 +41,7 @@ function FlowerPickerCard({ flower, qty, onAdd, onRemove }) {
         <p className="font-body text-[10px] text-[#A89888] mt-0.5 leading-tight">{flower.description}</p>
 
         <div className="flex items-center justify-between mt-3">
+          {/* Price comes from catalog */}
           <span className="font-display text-sm text-[#C9837A]">₹{flower.price}</span>
 
           <div className="flex items-center gap-1">
@@ -92,7 +93,6 @@ function BouquetRow({ flower, qty, onAdd, onRemove, onDelete }) {
 
 // ─── Main BouquetBuilder ──────────────────────────────────────────────────────
 export default function BouquetBuilder() {
-  // { flowerId: qty }
   const [basket, setBasket] = useState({});
   const sectionRef = useRef(null);
 
@@ -104,17 +104,22 @@ export default function BouquetBuilder() {
   });
   const del    = (id) => setBasket(b => { const n = { ...b }; delete n[id]; return n; });
 
-  const totalItems  = Object.values(basket).reduce((s, q) => s + q, 0);
-  const totalPrice  = BOUQUET_FLOWERS.reduce((s, f) => s + (basket[f.id] || 0) * f.price, 0);
-  const inBasket    = BOUQUET_FLOWERS.filter(f => basket[f.id] > 0);
+  const totalItems = Object.values(basket).reduce((s, q) => s + q, 0);
 
-  // Build WhatsApp message
+  // Prices are read directly from BOUQUET_FLOWERS in catalog.js
+  const totalPrice = BOUQUET_FLOWERS.reduce(
+    (s, f) => s + (basket[f.id] || 0) * f.price,
+    0
+  );
+
+  const inBasket = BOUQUET_FLOWERS.filter(f => basket[f.id] > 0);
+
+  // WhatsApp order — phone number comes from NEXT_PUBLIC_WHATSAPP_NUMBER via whatsapp.js
   const handleOrder = () => {
     if (totalItems === 0) return;
-    const lines = inBasket.map(f => `${f.name} × ${basket[f.id]} = ₹${f.price * basket[f.id]}`).join('%0A');
-    const msg = `Hello! I'd like to order a custom bouquet:%0A%0A${lines}%0A%0ATotal: ₹${totalPrice}`;
-    const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919999999999';
-    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank', 'noopener,noreferrer');
+    const items = inBasket.map(f => ({ name: f.name, qty: basket[f.id], price: f.price }));
+    const link = generateBouquetWhatsAppLink(items, totalPrice);
+    window.open(link, '_blank', 'noopener,noreferrer');
   };
 
   // Scroll reveal
